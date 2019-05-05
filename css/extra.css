@@ -1,0 +1,80 @@
+div.current_slide{
+  position: fixed;
+  right:1vw;
+  top: 1vw;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.5s linear;
+}
+div.current_slide.appear{
+  visibility: visible;
+  opacity: 1;
+}
+.line { display: block; }
+.line.focus { background: #5f5f5e; }
+.line.focus .hljs-comment, .line.focus .hljs-quote { color: #93a1a1; }
+
+div.rp{
+  position:relative;
+}
+div.rp div{
+  position: absolute;
+  top: 0px;
+  left:0px;
+  width:100%;
+  text-align: center;
+}
+
+ul.long-list {
+  overflow: auto;
+  list-style-type: none;
+}
+ul.long-list li {
+  float: left;
+  margin-right: 0px;
+  border-right: 1px solid #aaa;
+  padding: 0 10px;
+}
+ 
+ul.long-list li:last-child {
+  border-right: none;
+}
+ 
+ul.long-list li a {
+  text-decoration: none;
+  color: #ccc;
+  font: 25px/1 Helvetica, Verdana, sans-serif;
+  text-transform: uppercase;
+ 
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  -ms-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+ 
+ul.list {
+  overflow: auto;
+  list-style-type: none;
+}
+ul.list li {
+  text-align: right;
+  margin-right: 0px;
+  border-right: 1px solid #aaa;
+  padding: 0 10px;
+}
+.containeriframe {
+  width: 300px; 
+  display:inline-block;
+}
+.containercols {
+  display: flex;
+}
+.containercols img{
+  border: 0px !important;
+  background: transparent !important;
+}
+.col{
+  flex: 1;
+  vertical-align: middle;
+}

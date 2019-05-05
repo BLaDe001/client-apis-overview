@@ -1,0 +1,823 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>Overview of Qlik's client APIs</title>
+
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/reveal.css">
+  <link rel="stylesheet" href="css/theme/black.css">
+
+  <link rel="stylesheet" href="css/extra.css">
+
+  <!-- Theme used for syntax highlighting of code -->
+  <link rel="stylesheet" href="lib/css/monokai.css">
+
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+    document.getElementsByTagName('head')[0].appendChild(link);
+  </script>
+</head>
+
+<body>
+  <img src="img/QLIK_logo.png" alt="Qlik Logo" style="position: fixed; top: 1vw; left: 1vh; width: 18vw;" />
+  <div class="reveal">
+    <div class="slides">
+      <section>
+        <h2>Overview of Qlik's client APIs</h2>
+      </section>
+      <section>
+        <h3>Who Am I?</h3>
+        <ul>
+          <li class="fragment fade-in">Software architect <a href="https://qlik.com">@Qlik</a></li>
+        </ul>
+      </section>
+      <section>
+        <h3>Agenda</h3>
+        <ul>
+          <li class="fragment fade-in">
+            URL APIs
+            <ul>
+              <li class="fragment fade-in">single integration URL</li>
+              <li class="fragment fade-in">app integration URL</li>
+            </ul>
+          </li>
+          <li class="fragment fade-in">Visualization extensions</li>
+          <li class="fragment fade-in">Widgets & custom-components</li>
+          <li class="fragment fade-in">Themes</li>
+          <li class="fragment fade-in">Capability APIs</li>
+        </ul>
+      </section>
+      <section>
+        <section>
+          <h2>Single Integration URL</h2>
+          <p>aka Single Object</p>
+          <aside class="notes">
+            The single object URL-based mashup is available out of the box in both desktop and server.(In
+            0.95 it is available in desktop, but in server you have to add the single.html page to the
+            installation yourself). It is based on that you provide parameters like App and object in the
+            URL. The use case is a company that wants to include Qlik objects in a page on the intranet, for
+            example a portal.
+          </aside>
+        </section>
+        <section>
+          <span class="fragment fade-in-then-semi-out" data-fragment="1">http[s]://machinename|servername/</span><span
+            class="fragment fade-in-then-semi-out" data-fragment="2">single/?</span>
+          <span class="fragment fade-in-then-semi-out" data-fragment="3">appid={appid}</span>
+          <span style="position:relative;">
+            <span class="fragment fade-in-then-out"
+              data-fragment="4">&obj={obj}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <span style="position:absolute; left:0px;" class="fragment fade-in-then-semi-out"
+              data-fragment="4">&sheet={sheet}</span>
+          </span>
+          <span style="position:relative;">
+            <span class="fragment fade-in-then-out" data-fragment="5">&opt={options}&nbsp;&nbsp;&nbsp;</span>
+            <span style="position:absolute; left:0px;" class="fragment fade-in-then-out"
+              data-fragment="6">&opt=currsel</span>
+            <span style="position:absolute; left:0px;" class="fragment fade-in-then-out"
+              data-fragment="7">&opt=ctxmenu</span>
+            <span style="position:absolute; left:0px;" class="fragment fade-in-then-out"
+              data-fragment="8">&opt=nointeraction</span>
+            <span style="position:absolute; left:0px;" class="fragment fade-in-then-semi-out"
+              data-fragment="9">&opt=noselection</span>
+          </span>
+          <span class="fragment fade-in-then-semi-out" data-fragment="10">&nbsp;&nbsp;&bookmark={bookmark}</span>
+          <span class="fragment fade-in-then-semi-out" data-fragment="11">&select={selection}</span>
+          <span class="fragment fade-in-then-semi-out" data-fragment="12">&theme={theme}</span>
+          <span class="fragment fade-in-then-semi-out" data-fragment="13">&lang={lang}</span>
+          <span class="fragment fade-in-then-semi-out" data-fragment="14">&identity={identity}</span>
+          <br />
+          <aside class="notes">
+            Open http://127.0.0.1:8080/mashups/identity/ and explain the identity -- code for app with identity
+          </aside>
+
+        </section>
+      </section>
+
+      <section>
+        <section>
+          <h2>App Integration API</h2>
+          <aside class="notes">
+            The App Integration API is built on top of the Base URL. You can add additional potions and selections.
+            This API has been created to close the GAP for a feature in QlikView called document chaining: drilling down
+            from one application to another automatically transferring selections.
+          </aside>
+        </section>
+        <section>
+          <span class="fragment fade-in-then-semi-out" data-fragment="1">http[s]://machinename|servername/</span><span
+            class="fragment fade-in-then-semi-out" data-fragment="2">sense/</span>
+          <span class="fragment fade-in-then-semi-out" data-fragment="3">app/{appid}/</span>
+          <span class="fragment fade-in-then-semi-out" data-fragment="4">sheet/{sheetid}/</span>
+          <span class="fragment fade-in-then-semi-out" data-fragment="5">state/analysis/</span>
+          <span class="fragment fade-in-then-semi-out" data-fragment="6">bookmark/{bookmarkid}/</span>
+          <span style="position:relative;">
+            <span class="fragment fade-in-then-out"
+              data-fragment="7">options/clearselections/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <span style="position:absolute; left:0px; top:0px;" class="fragment fade-in-then-out"
+              data-fragment="8">options/{state}::clearselections/</span>
+            <span style="position:absolute; left:0px;top:0px;" class="fragment fade-in-then-semi-out"
+              data-fragment="9">options/developer/</span>
+          </span>
+          <span style="position:relative;">
+            <span class="fragment fade-in-then-out"
+              data-fragment="10">select/{field}/{[value1;value2]}/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <span style="position:absolute; left:0px; top:0px;" class="fragment fade-in-then-semi-out"
+              data-fragment="11">select/{state::field}/{[value1;value2]}/</span>
+          </span>
+          <span class="fragment fade-in-then-semi-out" data-fragment="12">theme/{themename}/</span>
+          <span class="fragment fade-in-then-semi-out" data-fragment="13">language/{lang}/</span>
+          <br />
+          <aside class="notes">
+            Open QSE and show off the developer option
+          </aside>
+
+        </section>
+      </section>
+
+      <section>
+        <section>
+          <h2>Visualization extensions</h2>
+        </section>
+        <section>
+
+          <h4>qext file</h4>
+          <pre><code class="hljs" data-trim>
+{
+  "name": "my-extension",
+  "description": "Hello world example",
+  "icon": "line-chart",
+  "preview": "helloworld.png",
+  "type": "visualization",
+  "version": 1.0.0,
+  "author": "Qlik International"
+}
+          </code></pre>
+          <div class="rp">
+            <div class="fragment fade-in-then-out" data-code-focus="2">
+              [mandatory] the display name of the web-extension <br />(not to be confused with the uniqueName or
+              uniqueID)
+            </div>
+            <div class="fragment fade-in-then-out" data-code-focus="4">
+              [optional]<br />
+              <ul class="long-list" style="font-size: 80%">
+                <li>bar-chart-vertical</li>
+                <li>extension</li>
+                <li>filterpane</li>
+                <li>gauge-chart</li>
+                <li>line-chart</li>
+                <li>list</li>
+                <li>map</li>
+                <li>pie-chart</li>
+                <li>scatter-chart</li>
+                <li>table</li>
+                <li>text-image</li>
+                <li>treemap</li>
+              </ul>
+              <hr />
+              "icon": "my-image.png"
+            </div>
+            <div class="fragment fade-in-then-out" data-code-focus="5">
+              [optional]<br /><img src="img/ex_gen_ExtensionQextInfoLibrary-HelloWorld.png" alt="" />
+            </div>
+            <div class="fragment fade-in-then-out" data-code-focus="6">
+              [mandatory] the web extension type<br />
+              the other types are:
+              <ul class="long-list" style="font-size: 80%">
+                <li>mashup</li>
+                <li>widget-library</li>
+                <li>themes</li>
+                <li>custom-component</li>
+                <li>visualization-template</li>
+                <li>mashup-template</li>
+              </ul>
+
+
+              <span style="font-size: 80%"></span>
+            </div>
+          </div>
+        </section>
+        <section>
+          <pre><code class="hljs" data-trim>
+define( ['qlik'], function(qlik){
+  return {
+    initialProperties: {...},
+    definition: {...},
+    support: {...},
+    beforeDestroy: function(){},
+    mounted: function(){},
+    updateData: function (layout) {},
+    paint: function ($element, layout) {},
+  };
+
+});
+            </code></pre>
+          <div class="rp">
+            <div class="fragment fade-in-then-out" data-code-focus="3">
+              <table>
+                <tr>
+                  <td>
+                    <pre style="font-size: 50%;">initialProperties : {
+  qHyperCubeDef : {
+    qDimensions : [],
+    qMeasures : [],
+    qInitialDataFetch : [{
+      qWidth : 2,
+      qHeight : 50
+    }]
+  },  
+  selectionMode : "CONFIRM"
+}</pre>
+                  </td>
+                  <td style="font-size: 80%;">Define either as a <ul>
+                      <li>hypercube (qHyperCubeDef) </li>
+                      <li> list object (qListObjectDef).</li>
+                    </ul>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div class="fragment fade-in-then-out" data-code-focus="4">
+              <table style="overflow: hidden;">
+                <tr>
+                  <td style="width: 25%;">
+                    <img src="img/ex_ExtensionPropertiesCustomListItemAdded.png" alt="" />
+                  </td>
+                  <td style="vertical-align: top; font-size: 80%; width:75%;">Property Panel definitions:<ul
+                      class="long-list">
+                      <li>Array</li>
+                      <li>Integer</li>
+                      <li>Number</li>
+                      <li>String</li>
+                      <li>Text</li>
+                      <li>Button</li>
+                      <li>Button group</li>
+                      <li>Check box</li>
+                      <li>Color-picker</li>
+                      <li>Drop down list</li>
+                      <li>Link</li>
+                      <li>Media</li>
+                      <li>Radio button</li>
+                      <li>Slider</li>
+                      <li>Range-slider</li>
+                      <li>Switch</li>
+                      <li>Textarea</li>
+                    </ul>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div class="fragment fade-in-then-out" data-code-focus="5">
+              <table>
+                <tr>
+                  <td style="width: 50%;">
+                    <pre style="font-size: 50%;">support: {
+  snapshot: true,
+  export: true,
+  exportData: true
+}</pre>
+                  </td>
+                  <td style="font-size: 80%;">Enable/disable support for<ul>
+                      <li>snapshot</li>
+                      <li>export as Image or PDF</li>
+                      <li>export data</li>
+                    </ul>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div class="fragment fade-in-then-out" data-code-focus="6">
+              Mostly used for clearing events & bindings preventing memory-leaks.
+            </div>
+            <div class="fragment fade-in-then-out" data-code-focus="7">
+              Runs once when the object is initializing.
+            </div>
+            <div class="fragment fade-in-then-out" data-code-focus="8">
+              Runs every time the layout or data changes, a new layout and returns a promise.
+            </div>
+            <div class="fragment fade-in-then-out" data-code-focus="9">
+              Renders the visualization extension.
+            </div>
+          </div>
+        </section>
+      </section>
+
+
+      <section>
+        <section>
+          <h2>Widgets &<br /> custom-components</h2>
+          <aside class="notes">
+            -- kboom --
+          </aside>
+        </section>
+      </section>
+
+      <section>
+        <section>
+          <h2>Capability APIs</h2>
+          <aside class="notes">
+            The Capability APIs are a collection of JavaScript APIs that allows you to easily embed Qlik Sense content
+            into a web page.
+          </aside>
+        </section>
+        <section>
+          <table>
+            <tr>
+              <td>
+                <img style="float:right;" src="img/mapping-apis.svg" alt="" />
+              </td>
+              <td style="width:28%; vertical-align:middle;">
+                <ul class="list" style="font-size: 60%;">
+                  <li>Root API</li>
+                  <li>App API</li>
+                  <li>Bookmark API</li>
+                  <li>Field API</li>
+                  <li>Selection API</li>
+                  <li>Variable API</li>
+                  <li>Visualization API</li>
+                  <li>Global API</li>
+                  <li>Navigation API</li>
+                  <li>Table API</li>
+                  <li>Theme API</li>
+                </ul>
+              </td>
+            </tr>
+          </table>
+
+        </section>
+        <section>
+          <h4>Root API</h4>
+          <ul style="columns:2; list-style-position: inside; font-size: 60%;">
+            <li class="fragment fade-in-then-semi-out">Lists:
+              <ul>
+                <li>getAppList</li>
+                <li>getThemeList</li>
+                <li>getExtensionList(deprecated)</li>
+                <li>callRepository(deprecated)</li>
+              </ul>
+              <br />
+            </li>
+            <li class="fragment fade-in-then-semi-out">Sessions:
+              <ul>
+                <li>openApp</li>
+                <li>currApp</li>
+                <li>getGlobal</li>
+                <li>sessionApp</li>
+                <li>sessionAppFromApp</li>
+              </ul>
+            </li>
+            <li class="fragment fade-in-then-semi-out">Events:
+              <ul>
+                <li>setOnError(deprecated)</li>
+                <li>on</li>
+                <li>off</li>
+              </ul>
+              <br /><br />
+            </li>
+            <li class="fragment fade-in-then-semi-out">Other:
+              <ul>
+                <li>resize</li>
+                <li>setDeviceType</li>
+                <li>setLanguage</li>
+                <li>table</li>
+                <li>registerExtension</li>
+              </ul>
+            </li>
+          </ul>
+          <aside class="notes">
+            registerExtension with code in this mashup -> http://127.0.0.1:8080/mashups/register_extension/
+            talk about the benefits
+          </aside>
+        </section>
+        <section>
+          <h4>Global API</h4>
+          <pre class="fragment"><code class="hljs" data-trim style="font-size: 80%;">
+const config = {
+  host: "myhost.com",
+  prefix: "/",
+  port: window.location.port,
+  isSecure: true
+};
+const global = qlik.getGlobal(config);</code></pre><br />
+          <ul style="columns:2; list-style-position: inside; font-size: 60%;">
+            <li class="fragment fade-in-then-semi-out">
+              getAppList
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              getProgress
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              cancelReload
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              getAuthenticatedUser
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              isPersonalMode
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              off & off method
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              getProductVersion(deprecated)
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              getQTProduct(deprecated)
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h4>App API</h4>
+          <ul style="columns:3; list-style-position: inside; font-size: 55%;">
+            <li class="fragment fade-in-then-semi-out">Selections:
+              <ul>
+                <li>back & forward</li>
+                <li>lockAll & unlockAll</li>
+                <li>clearAll</li>
+                <li>addAlternateState</li>
+                <li>removeAlternateState</li>
+                <li>selectionState</li>
+                <li>selectAssociations</li>
+              </ul>
+              <br />
+            </li>
+            <li class="fragment fade-in-then-semi-out">Get stuff:
+              <ul>
+                <li>field</li>
+                <li>getObject</li>
+                <li>getSnapshot</li>
+              </ul>
+              <br /><br />
+            </li>
+            <li class="fragment fade-in-then-semi-out">Layout/lists:
+              <ul>
+                <li>getAppLayout</li>
+                <li>getAppObjectList</li>
+                <li>getFullPropertyTree</li>
+                <li>getList</li>
+                <li>sessionAppFromApp</li>
+                <li>getObjectProperties</li>
+              </ul>
+              <br />
+            </li>
+            
+            <li class="fragment fade-in-then-semi-out">App & session:
+              <ul>
+                <li>close</li>
+                <li>on & off</li>
+                <li>doSave</li>
+                <li>doReload</li>
+                <li>getScript</li>
+                <li>setScript</li>
+              </ul>
+              <br />
+            </li>
+            <li class="fragment fade-in-then-semi-out">Session Objects:
+              <ul>
+                <li>createGenericObject</li>
+                <li>createList</li>
+                <li>createCube</li>
+                <li>createTable</li>
+                <li>destroySessionObject</li>
+              </ul>
+              <br />
+            </li>
+            <li class="fragment fade-in-then-semi-out">Search:
+              <ul>
+                <li>searchAssociations</li>
+                <li>searchResults</li>
+                <li>searchSuggest</li>
+                <li>doReload</li>
+              </ul>
+              <br />
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h4>Bookmark API</h4>
+          <ul style=" font-size: 60%;">
+            <li class="fragment fade-in-then-semi-out">
+              apply
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              create
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              remove
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h4>Navigation API</h4>
+          <ul style=" font-size: 60%;">
+            <li class="fragment fade-in-then-semi-out">
+              getCurrentSheetId
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              getMode & setMode
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              isModeAllowed
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              gotoSheet
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              gotoStory
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              nextSheet & prevSheet
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h4>Field API</h4>
+          <ul style=" font-size: 60%;">
+            <li class="fragment fade-in-then-semi-out">
+              lock & unlock
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              clear & clearOther
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              getData & getMoreData
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              select
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              selectAll
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              selectAlternative
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              selectExcluded
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              selectPossible
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              selectValues
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              toggleSelect
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              selectMatch
+            </li>
+          </ul>
+          <aside class="notes">
+            exemplify with code in this mashup -> http://127.0.0.1:8080/mashups/field_selections/
+            show request aborted
+            - alterntive 1 : async await
+            - alternative 2 : selectAssocistions
+          </aside>
+        </section>
+        <section>
+          <h4>Selection API</h4>
+          <ul style="columns:2; list-style-position: inside; font-size: 60%;">
+            <li class="fragment fade-in-then-semi-out">Methods:
+              <ul>
+                <li>clearAll</li>
+                <li>lockAll</li>
+                <li>unlockAll</li>
+              </ul>
+              <br />
+              <br /><br /><br /><br /><br /><br /><br /><br /><br />
+            </li>
+            <li class="fragment fade-in-then-semi-out">QFieldSelections:
+              <ul>
+                <li>fieldName</li>
+                <li>qSortIndex</li>
+                <li>field</li>
+                <li>locked</li>
+                <li>isNumeric</li>
+                <li>totalCount</li>
+                <li>selectedCount</li>
+                <li>qSelectionThreshold</li>
+                <li>qStateCounts</li>
+                <li>qSelected</li>
+                <li>selectedValues</li>
+                <li>notSelectedValues</li>
+              </ul>
+              <br />
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h4>Table API</h4>
+          <pre class="fragment"><code class="hljs" data-trim style="font-size: 80%;">
+const qTable = qlik.table(this); // in an extension
+app.visualization.get('visId').then(qVis=>{
+  const qTable = qlik.table(qVis);
+});</code></pre>
+          <ul style="columns:2; list-style-position: inside; font-size: 50%;">
+            <li class="fragment fade-in-then-semi-out">QTable:
+              <ul>
+                <li>exportData</li>
+                <li>getColByName</li>
+                <li>getMoreData</li>
+                <li>properties
+                  <ul>
+                    <li>rows (QRow)</li>
+                    <li>headers (QHeader)</li>
+                    <li>totals (QMeasureCell)</li>
+                    <li>rowCount</li>
+                    <li>colCount</li>
+                  </ul>
+                </li>
+              </ul>
+              <br />
+            </li>
+            <li class="fragment fade-in-then-semi-out">QDimensionCell:
+              <ul>
+                <li>select method</li>
+                <li>qText</li>
+                <li>qElemNumber</li>
+                <li>qState</li>
+                <li>qNum</li>
+              </ul>
+              <br />
+            </li>
+            <li class="fragment fade-in-then-semi-out">QHeader:
+              <ul>
+                <li>orderBy</li>
+                <li>reverseOrder</li>
+                <li>selectRange</li>
+              </ul>
+              <br />
+            </li>
+            <li class="fragment fade-in-then-semi-out">QRows:
+              <ul>
+                <li>dimensions (QDimensionCell)</li>
+                <li>measures (QMeasureCell)</li>
+                <li>cells</li>
+              </ul>
+              <br />
+            </li>
+
+            <li class="fragment fade-in-then-semi-out">QMeasureCell:
+              <ul>
+                <li>getPercent</li>
+                <li>getPercentOfMax</li>
+                <li>qText</li>
+                <li>qNum</li>
+              </ul>
+              <br />
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h4>Variable API</h4>
+          <pre class="fragment"><code class="hljs" data-trim style="font-size: 80%;">
+app.variable.createSessionVariable({qName : 'MYVAR', qDefinition: 'Month'});
+app.variable.setStringValue('MYVAR','=(1+1)');
+app.variable.getContent('MYVAR', reply => {
+  console.log( JSON.stringify(reply);
+});</code></pre>
+          <ul style=" font-size: 60%;">
+            <li class="fragment fade-in-then-semi-out">
+              create
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              createSessionVariable
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              get & getByName
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              getContent & setContent(deprecated)
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              setNumValue & setStringValue
+            </li>
+            <li class="fragment fade-in-then-semi-out">
+              getContentCallback
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h4>Themes API</h4>
+          <pre class="fragment"><code class="hljs" data-trim style="font-size: 80%;">
+qlik.theme.apply('my-theme-id').then(result => {
+  console.log(`theme applied with result: ${result}`);
+});</code></pre>
+          <ul style="columns:2; list-style-position: inside; font-size: 60%;">
+            <li class="fragment fade-in-then-semi-out">Methods:
+              <ul>
+                <li>apply</li>
+                <li>get</li>
+                <li>getApplied</li>
+                <li>save</li>
+              </ul>
+              <br />
+            </li>
+            <li class="fragment fade-in-then-semi-out">QTheme:
+              <ul>
+                <li>getStyle</li>
+                <li>apply</li>
+                <li>getApplied</li>
+                <li>save</li>
+              </ul>
+              <br />
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h4>Visualization API</h4>
+          <pre class="fragment"><code class="hljs" data-trim style="font-size: 80%;">
+app.visualization.create( 'barchart',
+    ['Case Owner Group', '=Avg([Case Duration Time])']
+).then(qVis => qVis.show('QV01'));</code></pre>
+          <pre class="fragment"><code class="hljs" data-trim style="font-size: 80%;">    
+app.visualization.create( 'gauge',
+  [{"qLibraryId":"eqZjE","qType":"measure"}]	
+));</code></pre>
+          <ul style="columns:2; list-style-position: inside; font-size: 60%;">
+
+            <li class="fragment fade-in-then-semi-out">Methods:
+              <ul>
+                <li>get</li>
+                <li>create</li>
+              </ul>
+              <br /><br /><br /><br /><br /><br /><br /><br /><br />
+            </li>
+            <li class="fragment fade-in-then-semi-out">QVisualization:
+              <ul>
+                <li>close</li>
+                <li>exportData</li>
+                <li>exportImg</li>
+                <li>exportPdf</li>
+                <li>resize</li>
+                <li>setOptions</li>
+                <li>show</li>
+                <li>toggleDataView</li>
+              </ul>
+              <br />
+            </li>
+          </ul>
+        </section>
+      </section>
+      <!-- Open Source -->
+      <section>
+        <h3>Qlik Open Source</h3><BR>
+        <div class="containercols">
+          <div class="col">
+            <p class="fragment"><img src="img/enigma.png"></p>
+            <p class="fragment"><img src="img/aw.png"></p>
+          </div>
+          <div class="col">
+            <p class="fragment"><img src="img/halyard.png"></p>
+            <p class="fragment"><img src="img/picassojs.png"></p>
+          </div>
+        </div>
+        <h4>Visit: https://github.com/qlik-oss</h4>
+      </section>
+      <section>
+        <h1>Community</h1>
+      </section>
+      <section>
+        <h1>thank you!!!!</h1>
+      </section>
+    </div>
+  </div>
+
+  <script src="js/reveal.js"></script>
+
+  <script>
+    // More info about config & dependencies:
+    // - https://github.com/hakimel/reveal.js#configuration
+    // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.initialize({
+      controls: true,
+      progress: true,
+      center: true,
+      hash: true,
+      transition: 'slide', // none/fade/slide/convex/concave/zoom
+      dependencies: [
+        { src: 'plugin/markdown/marked.js' },
+        { src: 'plugin/markdown/markdown.js' },
+        { src: 'plugin/search/search.js', async: true },
+        { src: 'plugin/notes/notes.js', async: true },
+        // { src: 'plugin/highlight/highlight.js', async: true }
+        { src: 'js/highlight.pack.js' },
+        {
+          src: 'js/reveal-code-focus.js',
+          async: true,
+          callback: function () {
+            RevealCodeFocus();
+          }
+        }
+      ]
+    });
+  </script>
+</body>
+
+</html>
