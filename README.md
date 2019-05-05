@@ -1,5 +1,5 @@
 # client-apis-overview
-A presentation done with revealjs titled `Overview f the client APIS`
+A presentation done with [revealjs](https://revealjs.com/) titled `Overview of the client APIS`
 
 # run the presentation
 ```
